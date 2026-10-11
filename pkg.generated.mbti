@@ -1,11 +1,59 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "ShiChengxu/MoonEdifact"
 
+import {
+  "moonbitlang/core/debug",
+}
+
 // Values
+pub fn detect_syntax(Bytes) -> Result[SyntaxProfile, Diagnostic]
 
 // Errors
 
 // Types and methods
+pub(all) struct Diagnostic {
+  code : String
+  layer : Layer
+  span : SourceSpan
+  segment_index : Int?
+  hint : String
+} derive(Eq, @debug.Debug)
+pub fn Diagnostic::equal(Self, Self) -> Bool
+pub fn Diagnostic::not_equal(Self, Self) -> Bool
+pub fn Diagnostic::to_repr(Self) -> @debug.Repr
+
+pub(all) enum Layer {
+  Syntax
+  Envelope
+  Resource
+} derive(Eq, @debug.Debug)
+pub fn Layer::equal(Self, Self) -> Bool
+pub fn Layer::not_equal(Self, Self) -> Bool
+pub fn Layer::to_repr(Self) -> @debug.Repr
+
+pub(all) struct SourceSpan {
+  start : Int
+  end : Int
+} derive(Eq, @debug.Debug)
+pub fn SourceSpan::equal(Self, Self) -> Bool
+pub fn SourceSpan::not_equal(Self, Self) -> Bool
+pub fn SourceSpan::to_repr(Self) -> @debug.Repr
+
+pub(all) struct SyntaxProfile {
+  component : Byte
+  element : Byte
+  decimal : Byte
+  release : Byte
+  reserved : Byte
+  terminator : Byte
+  charset : String
+  version : Int
+  explicit_una : Bool
+  body_start : Int
+} derive(Eq, @debug.Debug)
+pub fn SyntaxProfile::equal(Self, Self) -> Bool
+pub fn SyntaxProfile::not_equal(Self, Self) -> Bool
+pub fn SyntaxProfile::to_repr(Self) -> @debug.Repr
 
 // Type aliases
 
