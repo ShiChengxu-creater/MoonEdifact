@@ -12,6 +12,10 @@ pub fn detect_syntax(Bytes) -> Result[SyntaxProfile, Diagnostic]
 
 pub fn parse(Bytes, limits? : ParseLimits) -> ParseResult
 
+pub fn report_json(ParseResult, show_values? : Bool) -> String
+
+pub fn report_text(ParseResult) -> String
+
 pub fn validate_envelope(Document, max_diagnostics? : Int) -> EnvelopeResult
 
 // Errors
@@ -39,7 +43,9 @@ pub(all) struct Diagnostic {
   layer : Layer
   span : SourceSpan
   segment_index : Int?
-  hint : String
+  severity : String
+  message : String
+  hint : String?
 } derive(Eq, @debug.Debug)
 pub fn Diagnostic::equal(Self, Self) -> Bool
 pub fn Diagnostic::not_equal(Self, Self) -> Bool
@@ -119,6 +125,7 @@ pub(all) struct ParseResult {
   rules : CheckStatus
 } derive(Eq, @debug.Debug)
 pub fn ParseResult::equal(Self, Self) -> Bool
+pub fn ParseResult::is_valid(Self) -> Bool
 pub fn ParseResult::not_equal(Self, Self) -> Bool
 pub fn ParseResult::to_repr(Self) -> @debug.Repr
 

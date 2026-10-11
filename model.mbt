@@ -20,7 +20,9 @@ pub(all) struct Diagnostic {
   layer : Layer
   span : SourceSpan
   segment_index : Int?
-  hint : String
+  severity : String
+  message : String
+  hint : String?
 } derive(Debug, Eq)
 
 ///|
@@ -47,7 +49,15 @@ fn diagnostic(
   hint : String,
   segment_index? : Int,
 ) -> Diagnostic {
-  { code, layer, span: { start, end, }, segment_index, hint, }
+  {
+    code,
+    layer,
+    span: { start, end, },
+    segment_index,
+    severity: "error",
+    message: hint,
+    hint: None,
+  }
 }
 
 ///|
