@@ -62,7 +62,7 @@ pub fn parse(
           "R_SEGMENTS",
           Resource,
           pos,
-          input.length().min(pos + 3),
+          pos + (input.length() - pos).min(3),
           "Segment count exceeds the configured budget.",
           segment_index=segments.length() + 1,
         ),

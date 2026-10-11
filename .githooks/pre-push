@@ -1,0 +1,5 @@
+#!/bin/sh
+set -eu
+moon test --target native --deny-warn
+moon test --target js --deny-warn
+moon test --target wasm-gc --deny-warn

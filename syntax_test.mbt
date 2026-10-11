@@ -115,3 +115,13 @@ test "edge/syntax/leading newline retains offsets" {
   let p = @MoonEdifact.detect_syntax(b"\nUNB+UNOA:3+S'").unwrap()
   assert_eq(p.body_start, 1)
 }
+
+///|
+test "invalid/syntax/version four UNA repetition is unsupported" {
+  syntax_error(b"UNA:+.?*'UNB+UNOA:4+S'", "S_VERSION_UNSUPPORTED", 18, 19)
+}
+
+///|
+test "invalid/syntax/interactive interchange unsupported" {
+  syntax_error(b"UIB+UNOA:3+S'", "S_INTERACTIVE_UNSUPPORTED", 0, 3)
+}

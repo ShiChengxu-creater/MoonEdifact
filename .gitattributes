@@ -2,3 +2,5 @@
 *.edi text eol=lf
 *.py text eol=lf
 *.sh text eol=lf
+.githooks/* text eol=lf
+*.yml text eol=lf
