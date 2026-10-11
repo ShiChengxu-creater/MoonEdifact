@@ -54,7 +54,7 @@ def run(arguments, cwd):
     return result.stdout
 
 
-def prepare_snapshot(ref, prefix):
+def prepare_snapshot(ref, prefix, isolated=False):
     revision = run(["git", "rev-parse", "--verify", ref + "^{commit}"], ROOT).strip()
     archive = subprocess.run(["git", "archive", "--format=zip", revision], cwd=ROOT,
                              capture_output=True, check=True, timeout=30).stdout
@@ -62,8 +62,14 @@ def prepare_snapshot(ref, prefix):
     build.mkdir(exist_ok=True)
     workspace = Path(tempfile.mkdtemp(prefix=prefix, dir=build)).resolve()
     assert workspace.is_relative_to(build)
-    source = workspace / "source"
-    source.mkdir()
+    if isolated:
+        # moon package respects ancestor .gitignore: don't package beneath _build/.
+        source = Path(tempfile.mkdtemp(prefix="moonedifact-source-")).resolve()
+        assert not source.is_relative_to(ROOT.resolve())
+        (workspace / "source-path.txt").write_text(str(source) + "\n", encoding="utf-8")
+    else:
+        source = workspace / "source"
+        source.mkdir()
     with zipfile.ZipFile(BytesIO(archive)) as snapshot:
         for entry in snapshot.infolist():
             path = PurePosixPath(entry.filename)

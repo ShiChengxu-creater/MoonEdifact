@@ -12,7 +12,7 @@ def main():
     parser.add_argument("--ref", default="HEAD")
     parser.add_argument("--target", choices=TARGETS, action="append")
     args = parser.parse_args()
-    workspace, source, revision = prepare_snapshot(args.ref, "source-")
+    workspace, source, revision = prepare_snapshot(args.ref, "source-", isolated=True)
     interfaces = {path.relative_to(source).as_posix(): path.read_bytes()
                   for path in source.rglob("*.mbti")}
     run(["moon", "info"], source)
@@ -21,7 +21,8 @@ def main():
     assert interfaces == updated, "Generated public interfaces drift from the committed snapshot"
     run(["moon", "fmt", "--check"], source)
     run([sys.executable, "scripts/repository_checks.py"], source)
-    evidence = {"source_commit": revision, "tests": {}, "examples": {}, "cli": "not_run"}
+    evidence = {"source_commit": revision, "source_directory": str(source),
+                "tests": {}, "examples": {}, "cli": "not_run"}
     for target in args.target or TARGETS:
         run(["moon", "check", "--target", target, "--deny-warn"], source)
         run(["moon", "build", "--target", target, "--deny-warn"], source)

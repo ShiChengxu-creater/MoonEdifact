@@ -55,6 +55,8 @@ python scripts/package_checks.py
 
 `python scripts/clean_source.py` 可从当前提交的新源码目录重跑三后端门禁、示例与 CLI，结果在 `_build/source-*/result.json`。可用 `--target native` 或 `--ref COMMIT` 缩小/指定验证范围。两种快照验证均离线，不会 publish/push。
 
+干净源码目录位于系统临时目录，避开父仓库 `_build/` 忽略规则对 `moon package` 的影响；`source-path.txt` 和 result.json 记录实际位置。快照与输出保留供核查，脚本不递归删除任何目录。黄金语料检查同时核对 LF、工作目录摘要和已有 Git 索引字节，避免换行转换掩盖问题。
+
 接口由 `moon info` 生成，完成修改后运行 `moon info` 再 `moon fmt`，审查所有 `.mbti` 差异。稳定结果使用 assert_eq/assert_true；调试结构使用 Debug；当前测试不依赖更新 snapshot。
 
 可选覆盖率命令为 `moon test --enable-coverage` 与 `moon coverage analyze`。本版未测量/公布覆盖率百分比或性能数字。`moon-audit` 未安装，已做定向凭证扫描和 AI 输入/FFI 逻辑审查；不能把这些等同于完整第三方安全审计。成熟解析器黑盒对照留待终验。
