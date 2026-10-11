@@ -1,0 +1,8 @@
+import {
+  "ShiChengxu/MoonEdifact" @lib,
+  "ShiChengxu/MoonEdifact/cmd/nativeio",
+}
+
+pkgtype(kind: "executable")
+
+supported_targets = "native"

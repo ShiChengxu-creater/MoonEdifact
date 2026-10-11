@@ -1,0 +1,7 @@
+import {
+  "ShiChengxu/MoonEdifact" @lib,
+}
+
+pkgtype(kind: "executable")
+
+supported_targets = "+native+js+wasm-gc"
