@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "source": {
+    "kind": "original synthetic fixtures",
+    "license": "Apache-2.0",
+    "method": "Handwritten ASCII syntax-3 interchanges with invented parties, references and values; LF line endings. No business directory or real transaction data."
+  },
+  "files": [
+    {"file": "minimal.edi", "sha256": "0bf05ed119911eecaf7b5b0b6449eb918a622c0b35640a2c2dd7f65484b02298", "version": 3, "charset": "UNOA", "segments": 5, "messages": 1, "codes": []},
+    {"file": "custom-una-two.edi", "sha256": "b148a514b6af230fe798dfe3fd2868a966dd2f85ec210793d3e0592b2d6d7e68", "version": 3, "charset": "UNOA", "segments": 8, "messages": 2, "codes": []},
+    {"file": "released.edi", "sha256": "1a41af12885ad50ce2a251c962c92ce68efeaf3d6d277c9a56dea43c21152595", "version": 3, "charset": "UNOA", "segments": 5, "messages": 1, "codes": []},
+    {"file": "bad-count.edi", "sha256": "d6bfe20aef59efbeca3bb350549254957afcde765089d485cf2db462b5b2ae7a", "version": 3, "charset": "UNOA", "segments": 5, "messages": 1, "codes": ["E_MESSAGE_COUNT"]},
+    {"file": "bad-reference.edi", "sha256": "d74603b2829d4ddf6c554820b26a165e1f1c9f6569ede08c85bff3cb353890ac", "version": 3, "charset": "UNOA", "segments": 5, "messages": 1, "codes": ["E_MESSAGE_REFERENCE"]}
+  ]
+}

@@ -2,6 +2,7 @@
 from pathlib import Path
 import argparse
 import json
+import hashlib
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -63,6 +64,21 @@ def main():
     empty = scratch / "empty.edi"
     empty.write_bytes(b"")
     run(["validate", str(empty)], 1)
+    manifest = json.loads((ROOT / "testdata/manifest.json").read_text(encoding="utf-8"))
+    for fixture in manifest["files"]:
+        file = ROOT / "testdata" / fixture["file"]
+        assert hashlib.sha256(file.read_bytes()).hexdigest() == fixture["sha256"], fixture["file"]
+        expected = 1 if fixture["codes"] else 0
+        report = json.loads(run(["inspect", str(file), "--json"], expected).stdout)
+        assert report["segment_count"] == fixture["segments"]
+        assert report["message_count"] == fixture["messages"]
+        assert [d["code"] for d in report["diagnostics"]] == fixture["codes"]
+        assert (report["profile"]["version"], report["profile"]["charset"]) == (fixture["version"], fixture["charset"])
+    library = subprocess.run(["moon", "run", "examples/cli_inspect_validate"], cwd=ROOT,
+                             capture_output=True, text=True, encoding="utf-8", timeout=90)
+    assert library.returncode == 0, library.stderr
+    library_report = json.loads(next(line[8:] for line in library.stdout.splitlines() if line.startswith("inspect=")))
+    assert library_report == good, "Library and CLI must report the same model and diagnostics."
     print(f"CLI acceptance: {checks} end-to-end checks passed.")
 
 if __name__ == "__main__":
