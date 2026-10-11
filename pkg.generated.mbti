@@ -6,11 +6,32 @@ import {
 }
 
 // Values
+pub fn default_limits() -> ParseLimits
+
 pub fn detect_syntax(Bytes) -> Result[SyntaxProfile, Diagnostic]
+
+pub fn parse(Bytes, limits? : ParseLimits) -> ParseResult
 
 // Errors
 
 // Types and methods
+pub(all) enum CheckStatus {
+  Passed
+  Failed
+  NotChecked
+} derive(Eq, @debug.Debug)
+pub fn CheckStatus::equal(Self, Self) -> Bool
+pub fn CheckStatus::not_equal(Self, Self) -> Bool
+pub fn CheckStatus::to_repr(Self) -> @debug.Repr
+
+pub(all) struct Component {
+  value : Bytes
+  span : SourceSpan
+} derive(Eq, @debug.Debug)
+pub fn Component::equal(Self, Self) -> Bool
+pub fn Component::not_equal(Self, Self) -> Bool
+pub fn Component::to_repr(Self) -> @debug.Repr
+
 pub(all) struct Diagnostic {
   code : String
   layer : Layer
@@ -22,6 +43,23 @@ pub fn Diagnostic::equal(Self, Self) -> Bool
 pub fn Diagnostic::not_equal(Self, Self) -> Bool
 pub fn Diagnostic::to_repr(Self) -> @debug.Repr
 
+pub(all) struct Document {
+  profile : SyntaxProfile
+  segments : Array[Segment]
+  span : SourceSpan
+} derive(Eq, @debug.Debug)
+pub fn Document::equal(Self, Self) -> Bool
+pub fn Document::not_equal(Self, Self) -> Bool
+pub fn Document::to_repr(Self) -> @debug.Repr
+
+pub(all) struct Element {
+  components : Array[Component]
+  span : SourceSpan
+} derive(Eq, @debug.Debug)
+pub fn Element::equal(Self, Self) -> Bool
+pub fn Element::not_equal(Self, Self) -> Bool
+pub fn Element::to_repr(Self) -> @debug.Repr
+
 pub(all) enum Layer {
   Syntax
   Envelope
@@ -30,6 +68,39 @@ pub(all) enum Layer {
 pub fn Layer::equal(Self, Self) -> Bool
 pub fn Layer::not_equal(Self, Self) -> Bool
 pub fn Layer::to_repr(Self) -> @debug.Repr
+
+pub(all) struct ParseLimits {
+  max_input_bytes : Int
+  max_segments : Int
+  max_segment_bytes : Int
+  max_elements : Int
+  max_components : Int
+  max_diagnostics : Int
+} derive(Eq, @debug.Debug)
+pub fn ParseLimits::equal(Self, Self) -> Bool
+pub fn ParseLimits::not_equal(Self, Self) -> Bool
+pub fn ParseLimits::to_repr(Self) -> @debug.Repr
+
+pub(all) struct ParseResult {
+  document : Document?
+  diagnostics : Array[Diagnostic]
+  syntax : CheckStatus
+  envelope : CheckStatus
+  rules : CheckStatus
+} derive(Eq, @debug.Debug)
+pub fn ParseResult::equal(Self, Self) -> Bool
+pub fn ParseResult::not_equal(Self, Self) -> Bool
+pub fn ParseResult::to_repr(Self) -> @debug.Repr
+
+pub(all) struct Segment {
+  tag : String
+  index : Int
+  elements : Array[Element]
+  span : SourceSpan
+} derive(Eq, @debug.Debug)
+pub fn Segment::equal(Self, Self) -> Bool
+pub fn Segment::not_equal(Self, Self) -> Bool
+pub fn Segment::to_repr(Self) -> @debug.Repr
 
 pub(all) struct SourceSpan {
   start : Int
