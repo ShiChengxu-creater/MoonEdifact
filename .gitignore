@@ -7,6 +7,8 @@ target
 项目申报书.md
 .agent-workplace/
 .moonreduce/
+__pycache__/
+*.py[cod]
 *-result/
 AGENTS.md
 goal.md

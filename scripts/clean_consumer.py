@@ -54,17 +54,13 @@ def run(arguments, cwd):
     return result.stdout
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--ref", default="HEAD", help="Committed source to test")
-    parser.add_argument("--target", choices=TARGETS, action="append")
-    args = parser.parse_args()
-    revision = run(["git", "rev-parse", "--verify", args.ref + "^{commit}"], ROOT).strip()
+def prepare_snapshot(ref, prefix):
+    revision = run(["git", "rev-parse", "--verify", ref + "^{commit}"], ROOT).strip()
     archive = subprocess.run(["git", "archive", "--format=zip", revision], cwd=ROOT,
                              capture_output=True, check=True, timeout=30).stdout
     build = (ROOT / "_build").resolve()
     build.mkdir(exist_ok=True)
-    workspace = Path(tempfile.mkdtemp(prefix="consumer-", dir=build)).resolve()
+    workspace = Path(tempfile.mkdtemp(prefix=prefix, dir=build)).resolve()
     assert workspace.is_relative_to(build)
     source = workspace / "source"
     source.mkdir()
@@ -80,6 +76,15 @@ def main():
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 destination.write_bytes(snapshot.read(entry))
     assert not (source / "_build").exists(), "Source snapshot must have no build cache"
+    return workspace, source, revision
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--ref", default="HEAD", help="Committed source to test")
+    parser.add_argument("--target", choices=TARGETS, action="append")
+    args = parser.parse_args()
+    workspace, source, revision = prepare_snapshot(args.ref, "consumer-")
     consumer = workspace / "consumer"
     consumer.mkdir()
     (workspace / "moon.work").write_text('members = [ "./source", "./consumer" ]\n', encoding="utf-8")

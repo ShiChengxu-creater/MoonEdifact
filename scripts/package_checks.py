@@ -16,7 +16,7 @@ def main():
         "CHANGELOG.md", "docs/SCOPE.md", "docs/SYNTAX_PROFILES.md", "docs/DIAGNOSTICS.md",
         "docs/SECURITY.md", "testdata/manifest.json",
     }
-    forbidden = {".git", "_build", "target", ".agent-workplace", ".agents", ".codex", ".moon"}
+    forbidden = {".git", "_build", "target", ".agent-workplace", ".agents", ".codex", ".moon", "__pycache__"}
     with zipfile.ZipFile(archive) as package:
         names = set(package.namelist())
         assert required <= names, f"Missing package files: {sorted(required - names)}"
@@ -31,6 +31,10 @@ def main():
             data = package.read("testdata/" + fixture["file"])
             assert hashlib.sha256(data).hexdigest() == fixture["sha256"], fixture["file"]
     digest = hashlib.sha256(archive.read_bytes()).hexdigest()
+    (archive.parent / "check-result.json").write_text(json.dumps({
+        "archive": archive.name, "sha256": digest, "files": len(names),
+        "fixture_hashes_verified": len(manifest["files"]), "uploaded": False,
+    }, indent=2) + "\n", encoding="utf-8")
     print(f"Local package: {len(names)} files verified; SHA256={digest}")
     print("No upload performed; registry availability and installation remain unverified.")
 

@@ -11,7 +11,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--exe", type=Path)
     config = parser.parse_args()
-    executable = config.exe or ROOT / "_build/native/debug/build/cmd/main/main.exe"
+    binary_dir = ROOT / "_build/native/debug/build/cmd/main"
+    candidates = [binary_dir / name for name in ("main.exe", "main", "main.out")]
+    executable = config.exe or next((path for path in candidates if path.is_file()), candidates[0])
     executable = executable.resolve()
     assert executable.is_file(), "Build the native CLI first."
     checks = 0
