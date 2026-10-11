@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+subject=$(head -n 1 "$1")
+case "$subject" in
+  Merge*|merge:*) exit 0 ;;
+esac
+if ! printf '%s\n' "$subject" | grep -Eq '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([^)]+\))?!?: .+'; then
+  echo 'Use a Conventional Commit subject, for example: feat: parse service segments' >&2
+  exit 1
+fi

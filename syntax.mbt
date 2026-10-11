@@ -22,17 +22,6 @@ pub fn detect_syntax(input : Bytes) -> Result[SyntaxProfile, Diagnostic] {
   let release = if explicit_una { input[6] } else { b'?' }
   let reserved = if explicit_una { input[7] } else { b' ' }
   let terminator = if explicit_una { input[8] } else { b'\'' }
-  if reserved != b' ' {
-    return Err(
-      diagnostic(
-        "S_UNA_RESERVED",
-        Syntax,
-        7,
-        8,
-        "Syntax 3 requires a space at UNA position 5.",
-      ),
-    )
-  }
   let services = [component, element, decimal, release, terminator]
   let positions = [3, 4, 5, 6, 8]
   for i = 0; i < services.length(); i = i + 1 {
@@ -82,6 +71,25 @@ pub fn detect_syntax(input : Bytes) -> Result[SyntaxProfile, Diagnostic] {
         (input[body_start] == b'\r' || input[body_start] == b'\n') {
     body_start = body_start + 1
   }
+  if input.length() - body_start >= 3 &&
+    input[body_start] == b'U' &&
+    input[body_start + 1] == b'I' &&
+    (
+      input[body_start + 2] == b'B' ||
+      input[body_start + 2] == b'H' ||
+      input[body_start + 2] == b'T' ||
+      input[body_start + 2] == b'Z'
+    ) {
+    return Err(
+      diagnostic(
+        "S_INTERACTIVE_UNSUPPORTED",
+        Syntax,
+        body_start,
+        body_start + 3,
+        "Interactive EDIFACT syntax is not supported in 0.1.0.",
+      ),
+    )
+  }
   if input.length() - body_start < 4 ||
     input[body_start] != b'U' ||
     input[body_start + 1] != b'N' ||
@@ -92,7 +100,7 @@ pub fn detect_syntax(input : Bytes) -> Result[SyntaxProfile, Diagnostic] {
         "S_UNB_MISSING",
         Syntax,
         body_start,
-        input.length().min(body_start + 4),
+        body_start + (input.length() - body_start).min(4),
         "Expected UNB as the first segment.",
       ),
     )
@@ -106,7 +114,7 @@ pub fn detect_syntax(input : Bytes) -> Result[SyntaxProfile, Diagnostic] {
         "S_SYNTAX_DECLARATION",
         Syntax,
         start,
-        input.length().min(start + 7),
+        start + (input.length() - start).min(7),
         "Expected a four-letter syntax identifier and one syntax version digit.",
       ),
     )
@@ -131,6 +139,17 @@ pub fn detect_syntax(input : Bytes) -> Result[SyntaxProfile, Diagnostic] {
         start + 5,
         start + 6,
         "Only syntax version 3 is supported.",
+      ),
+    )
+  }
+  if reserved != b' ' {
+    return Err(
+      diagnostic(
+        "S_UNA_RESERVED",
+        Syntax,
+        7,
+        8,
+        "Syntax 3 requires a space at UNA position 5.",
       ),
     )
   }

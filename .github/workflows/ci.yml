@@ -1,0 +1,68 @@
+name: Initial acceptance
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: acceptance-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  acceptance:
+    name: ${{ matrix.target }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [native, js, wasm-gc]
+    env:
+      MOONBIT_INSTALL_VERSION: 0.10.14+7d59c7ec9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install the verified MoonBit distribution
+        shell: bash
+        run: |
+          curl --fail --silent --show-error --location https://cli.moonbitlang.com/unix.sh --output /tmp/moonbit-install.sh
+          bash /tmp/moonbit-install.sh "$MOONBIT_INSTALL_VERSION"
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - name: Verify toolchain pin
+        shell: bash
+        run: |
+          moon version
+          moonc -v | grep -F 'v0.10.14+7d59c7ec9'
+      - name: Check formatting and repository evidence
+        run: |
+          moon fmt --check
+          python scripts/repository_checks.py
+      - name: Check, build and test
+        run: |
+          moon check --target ${{ matrix.target }} --deny-warn
+          moon build --target ${{ matrix.target }} --deny-warn
+          moon test --target ${{ matrix.target }} --deny-warn
+      - name: Run documented examples
+        run: python scripts/examples_smoke.py --target ${{ matrix.target }}
+      - name: Test an uncached independent consumer
+        run: python scripts/clean_consumer.py --target ${{ matrix.target }}
+      - name: Native CLI end-to-end tests
+        if: matrix.target == 'native'
+        run: python scripts/cli_smoke.py
+      - name: Verify the generated API and package contents
+        if: matrix.target == 'native'
+        run: |
+          moon info
+          moon fmt --check
+          git diff --exit-code
+          moon package
+          python scripts/package_checks.py
