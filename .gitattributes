@@ -4,3 +4,8 @@
 *.sh text eol=lf
 .githooks/* text eol=lf
 *.yml text eol=lf
+*.mbt text eol=lf
+*.mbti text eol=lf
+*.md text eol=lf
+*.pkg text eol=lf
+moon.mod text eol=lf

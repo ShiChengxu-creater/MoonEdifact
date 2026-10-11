@@ -2,6 +2,7 @@
 from pathlib import Path
 import hashlib
 import json
+import os
 import re
 import subprocess
 
@@ -9,8 +10,16 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def main():
-    paths = subprocess.run(["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"],
-                           cwd=ROOT, capture_output=True, check=True).stdout.decode("utf-8").split("\0")
+    if (ROOT / ".git").exists():
+        paths = subprocess.run(["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"],
+                               cwd=ROOT, capture_output=True, check=True).stdout.decode("utf-8").split("\0")
+    else:
+        # A git archive has no .git; don't accidentally inspect an ancestor repository.
+        excluded = {"_build", "target", ".git", ".agent-workplace", ".agents", ".codex", ".moon", "__pycache__"}
+        paths = []
+        for directory, children, files in os.walk(ROOT):
+            children[:] = [child for child in children if child not in excluded]
+            paths.extend((Path(directory) / name).relative_to(ROOT).as_posix() for name in files)
     paths = sorted(set(path for path in paths if path and (ROOT / path).is_file()))
     # This is a deliberately narrow check, not a full security audit.
     patterns = (
@@ -39,7 +48,15 @@ def main():
     for entry in manifest["files"]:
         path = ROOT / "testdata" / entry["file"]
         assert path.resolve().is_relative_to((ROOT / "testdata").resolve())
-        assert hashlib.sha256(path.read_bytes()).hexdigest() == entry["sha256"], path.name
+        data = path.read_bytes()
+        assert b"\r" not in data, f"Golden fixture must use LF: {path.name}"
+        assert hashlib.sha256(data).hexdigest() == entry["sha256"], path.name
+        if (ROOT / ".git").exists():
+            indexed = subprocess.run(["git", "show", ":testdata/" + entry["file"]],
+                                     cwd=ROOT, capture_output=True, timeout=15)
+            if indexed.returncode == 0:
+                assert hashlib.sha256(indexed.stdout).hexdigest() == entry["sha256"], (
+                    f"Git index differs from manifest: {path.name}; normalize and stage the fixture")
     assert "Apache License" in (ROOT / "LICENSE").read_text(encoding="utf-8")
     diagnostics = ROOT / "docs/DIAGNOSTICS.md"
     if diagnostics.exists():

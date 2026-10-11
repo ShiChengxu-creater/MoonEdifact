@@ -26,7 +26,7 @@ moon run cmd/main -- validate testdata/minimal.edi
 moon run cmd/main -- validate testdata/bad-count.edi
 ```
 
-依次退出 0、0、1。失败报告包含 `E_MESSAGE_COUNT` 及错误字段的字节范围；业务规则始终 `not_checked`。native 构建后的程序路径为 `_build/native/debug/build/cmd/main/main.exe`，Linux 也采用该文件名，可复制或重命名为 `moonedifact` 使用。
+依次退出 0、0、1。失败报告包含 `E_MESSAGE_COUNT` 及错误字段的字节范围；业务规则始终 `not_checked`。本地 Windows native 构建后的程序路径为 `_build/native/debug/build/cmd/main/main.exe`，可复制或重命名使用。其他平台如果生成路径不同，可通过 `cli_smoke.py --exe PATH` 指定。
 
 ```sh
 python scripts/examples_smoke.py

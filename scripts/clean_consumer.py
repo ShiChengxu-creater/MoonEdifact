@@ -54,20 +54,22 @@ def run(arguments, cwd):
     return result.stdout
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--ref", default="HEAD", help="Committed source to test")
-    parser.add_argument("--target", choices=TARGETS, action="append")
-    args = parser.parse_args()
-    revision = run(["git", "rev-parse", "--verify", args.ref + "^{commit}"], ROOT).strip()
+def prepare_snapshot(ref, prefix, isolated=False):
+    revision = run(["git", "rev-parse", "--verify", ref + "^{commit}"], ROOT).strip()
     archive = subprocess.run(["git", "archive", "--format=zip", revision], cwd=ROOT,
                              capture_output=True, check=True, timeout=30).stdout
     build = (ROOT / "_build").resolve()
     build.mkdir(exist_ok=True)
-    workspace = Path(tempfile.mkdtemp(prefix="consumer-", dir=build)).resolve()
+    workspace = Path(tempfile.mkdtemp(prefix=prefix, dir=build)).resolve()
     assert workspace.is_relative_to(build)
-    source = workspace / "source"
-    source.mkdir()
+    if isolated:
+        # moon package respects ancestor .gitignore: don't package beneath _build/.
+        source = Path(tempfile.mkdtemp(prefix="moonedifact-source-")).resolve()
+        assert not source.is_relative_to(ROOT.resolve())
+        (workspace / "source-path.txt").write_text(str(source) + "\n", encoding="utf-8")
+    else:
+        source = workspace / "source"
+        source.mkdir()
     with zipfile.ZipFile(BytesIO(archive)) as snapshot:
         for entry in snapshot.infolist():
             path = PurePosixPath(entry.filename)
@@ -80,6 +82,15 @@ def main():
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 destination.write_bytes(snapshot.read(entry))
     assert not (source / "_build").exists(), "Source snapshot must have no build cache"
+    return workspace, source, revision
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--ref", default="HEAD", help="Committed source to test")
+    parser.add_argument("--target", choices=TARGETS, action="append")
+    args = parser.parse_args()
+    workspace, source, revision = prepare_snapshot(args.ref, "consumer-")
     consumer = workspace / "consumer"
     consumer.mkdir()
     (workspace / "moon.work").write_text('members = [ "./source", "./consumer" ]\n', encoding="utf-8")
