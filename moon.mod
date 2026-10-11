@@ -21,6 +21,6 @@ license = "Apache-2.0"
 
 keywords = [ ]
 
-preferred_target = "wasm-gc"
+preferred_target = "native"
 
 description = "Bounded byte-oriented UN/EDIFACT syntax 3 parser, envelope validator and native CLI"

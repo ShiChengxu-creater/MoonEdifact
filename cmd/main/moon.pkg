@@ -2,4 +2,13 @@
 //   "ShiChengxu/MoonEdifact" @lib,
 // }
 
+import {
+  "ShiChengxu/MoonEdifact" @lib,
+  "ShiChengxu/MoonEdifact/cmd/options",
+  "ShiChengxu/MoonEdifact/cmd/nativeio",
+  "moonbitlang/core/env",
+}
+
 pkgtype(kind: "executable")
+
+supported_targets = "native"

@@ -1,0 +1,40 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ShiChengxu/MoonEdifact/cmd/options"
+
+import {
+  "ShiChengxu/MoonEdifact",
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn help_text() -> String
+
+pub fn parse_args(Array[String]) -> Result[Options, String]
+
+// Errors
+
+// Types and methods
+pub(all) enum Action {
+  Help
+  Version
+  Inspect
+  Validate
+} derive(Eq, @debug.Debug)
+pub fn Action::equal(Self, Self) -> Bool
+pub fn Action::not_equal(Self, Self) -> Bool
+pub fn Action::to_repr(Self) -> @debug.Repr
+
+pub(all) struct Options {
+  action : Action
+  file : String
+  json : Bool
+  show_values : Bool
+  limits : @MoonEdifact.ParseLimits
+} derive(Eq, @debug.Debug)
+pub fn Options::equal(Self, Self) -> Bool
+pub fn Options::not_equal(Self, Self) -> Bool
+pub fn Options::to_repr(Self) -> @debug.Repr
+
+// Type aliases
+
+// Traits
