@@ -128,6 +128,7 @@ pub(all) enum CheckStatus {
 /// Syntax failures return no partial document. Business rules are always NotChecked.
 pub(all) struct ParseResult {
   document : Document?
+  interchange : Interchange?
   diagnostics : Array[Diagnostic]
   syntax : CheckStatus
   envelope : CheckStatus

@@ -81,15 +81,21 @@ pub fn parse(
   } else {
     segments[segments.length() - 1].span.end
   }
+  let document : Document = {
+    profile,
+    segments,
+    span: { start: profile.body_start, end, },
+  }
+  let envelope = validate_envelope(
+    document,
+    max_diagnostics=limits.max_diagnostics,
+  )
   {
-    document: Some({
-      profile,
-      segments,
-      span: { start: profile.body_start, end, },
-    }),
-    diagnostics: [],
+    document: Some(document),
+    interchange: envelope.interchange,
+    diagnostics: envelope.diagnostics,
     syntax: Passed,
-    envelope: NotChecked,
+    envelope: envelope.status,
     rules: NotChecked,
   }
 }
@@ -98,6 +104,7 @@ pub fn parse(
 fn parse_failure(error : Diagnostic) -> ParseResult {
   {
     document: None,
+    interchange: None,
     diagnostics: [error],
     syntax: Failed,
     envelope: NotChecked,
