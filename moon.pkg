@@ -3,3 +3,5 @@ import {
   "moonbitlang/core/debug",
   "moonbitlang/core/json",
 }
+
+supported_targets = "+native+js+wasm-gc"

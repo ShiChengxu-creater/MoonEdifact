@@ -1,0 +1,6 @@
+import {
+  "ShiChengxu/MoonEdifact" @lib,
+  "moonbitlang/core/debug",
+}
+
+supported_targets = "+native+js+wasm-gc"
