@@ -34,7 +34,7 @@ jobs:
       - name: Install the verified MoonBit distribution
         shell: bash
         run: |
-          curl --fail --silent --show-error --location https://cli.moonbitlang.com/unix.sh --output /tmp/moonbit-install.sh
+          curl --fail --silent --show-error --location https://cli.moonbitlang.com/install/unix.sh --output /tmp/moonbit-install.sh
           bash /tmp/moonbit-install.sh "$MOONBIT_INSTALL_VERSION"
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
       - name: Verify toolchain pin
