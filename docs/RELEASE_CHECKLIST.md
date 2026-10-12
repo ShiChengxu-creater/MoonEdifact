@@ -1,6 +1,6 @@
 # 0.1.0 发布清单
 
-本次用户要求所有小目标先本地提交，最终由用户自己 push。以下外部步骤尚未执行；本地源码包不等于注册表发布。
+初验实现阶段按用户要求先本地提交。2026-10-12 用户改为授权 Codex 创建公开 GitHub 仓库、推送并跟进 CI，失败时继续修复。GitHub 目标为 [ShiChengxu-creater/MoonEdifact](https://github.com/ShiChengxu-creater/MoonEdifact)；Mooncakes 发布和注册表安装仍未执行，本地源码包不等于注册表发布。
 
 ## 本地交付
 
@@ -11,13 +11,14 @@
 - [x] 每个小目标本地提交，保留测试与实现关联。
 - [x] 最后干净源码快照与本地 package 内容复验，证据见 INITIAL_ACCEPTANCE。
 
-## 维护者 push 前
+## GitHub 推送准备
 
-- [ ] 确定公开仓库 URL；当前 `git remote -v` 为空，没有设置远程。
-- [ ] 将 `moon.mod` 的 repository 设置为实际 URL，核对 Mooncakes 用户/包名可用性；不要从包名猜测 GitHub 地址。
+- [x] 用 ShiChengxu-creater 创建公开仓库，origin 指向 `https://github.com/ShiChengxu-creater/MoonEdifact.git`。
+- [x] 将 `moon.mod` 的 repository 设置为实际 URL；保留原 Mooncakes 包名。
+- [ ] 发布前核对 Mooncakes 用户/包名可用性，GitHub 账号不代替注册表账号确认。
 - [ ] 核对发布范围、维护联系、规范/许可记录和当前参赛轮次要求。
 - [ ] 对元数据变更运行 `moon info`、`moon fmt`、check/test，提交并核对工作区。
-- [ ] 由维护者添加远程并 push；本次自动化工作不会执行 push。
+- [ ] 按用户授权推送 main，并核对远程提交与本地 HEAD 一致。
 
 ## Push 后
 

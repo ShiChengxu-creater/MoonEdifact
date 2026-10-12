@@ -17,4 +17,4 @@
 
 核心按职责文件组织在一个库包；native 文件适配单独包，以避免平台 I/O 影响跨目标使用。终验扩展及 `1.0.0` 兼容承诺不在本次实施范围。
 
-后续由维护者决定实际公共仓库地址、注册表账号/包名可用性、维护联系人和周期。没有把这些外部状态假定为已经完成。任务及证据见 [IMPLEMENTATION.md](IMPLEMENTATION.md) 和 [INITIAL_ACCEPTANCE.md](INITIAL_ACCEPTANCE.md)。
+2026-10-12，用户授权 Codex 用 `ShiChengxu-creater` 创建公开仓库 [MoonEdifact](https://github.com/ShiChengxu-creater/MoonEdifact) 并推送、跟进 CI；原本不 push 的限制由此次授权覆盖。注册表账号/包名可用性及维护周期仍需维护者决定，GitHub 账号不自动决定 Mooncakes 名称。任务及证据见 [IMPLEMENTATION.md](IMPLEMENTATION.md) 和 [INITIAL_ACCEPTANCE.md](INITIAL_ACCEPTANCE.md)。

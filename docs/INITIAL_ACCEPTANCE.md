@@ -2,6 +2,8 @@
 
 日期：2026-10-11。状态：本地初验实现、文档、三后端门禁、干净源码、独立消费与本地包复验全部通过。用户要求所有提交留在本地，由其自行 push；没有执行 push 或 Mooncakes publish。
 
+后续 GitHub 阶段（2026-10-12）：用户授权 Codex 创建公开仓库 [ShiChengxu-creater/MoonEdifact](https://github.com/ShiChengxu-creater/MoonEdifact)，推送本地 main 并跟进 CI，失败时继续修复。仓库已创建、repository 元数据已补齐；远程测试结果将在通过后补充。下文 2026-10-11 的记录保留为本地验收历史，Mooncakes 发布仍未执行。
+
 | goal.md 初验项 | 交付证据 |
 |---|---|
 | 语法版本 3、UNOA/UNOB、UNA | syntax.mbt / syntax_test.mbt；支持范围见 SYNTAX_PROFILES |

@@ -1,6 +1,6 @@
 # MoonEDIFACT
 
-MoonBit 的 UN/EDIFACT 字节解析与封套检查库，附 native 文件 CLI。`0.1.0` 初验版支持语法版本 3、默认/自定义 `UNA`、release 转义和单交换中的多条直接消息，返回通用模型、原始字节范围和稳定诊断。
+MoonBit 的 UN/EDIFACT 字节解析与封套检查库，附 native 文件 CLI。`0.1.0` 初验版支持语法版本 3、默认/自定义 `UNA`、release 转义和单交换中的多条直接消息，返回通用模型、原始字节范围和稳定诊断。源码仓库：[ShiChengxu-creater/MoonEdifact](https://github.com/ShiChengxu-creater/MoonEdifact)。
 
 结果分别报告 `syntax`、`envelope`、`rules`。本版业务规则始终为 `not_checked`；`is_valid()` 只表示语法和封套通过。未知业务段会保留在模型中，ORDERS、INVOIC 等消息的业务顺序、代码表和伙伴规则需由调用者处理。
 
@@ -26,6 +26,8 @@ MoonBit 的 UN/EDIFACT 字节解析与封套检查库，附 native 文件 CLI。
 安装 MoonBit 的入口是 [官方下载页](https://www.moonbitlang.com/download)。取得本仓库源码后，在仓库根目录执行：
 
 ```sh
+git clone https://github.com/ShiChengxu-creater/MoonEdifact.git
+cd MoonEdifact
 moon check --deny-warn
 moon test --deny-warn
 moon build --target native --deny-warn
