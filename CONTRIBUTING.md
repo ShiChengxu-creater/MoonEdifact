@@ -19,4 +19,4 @@ hooks 不自动 stage 文件或改写提交，修改接口需手动审查。没�
 
 提议在 GitHub 配置 main 分支保护：要求初验三个目标成功、禁止 force push、按维护团队规模要求审查。这些是建议，当前本地工作未配置远程保护。
 
-安全问题优先通过仓库维护者可用的私下渠道提交最小合成复现；不公开真实报文或凭证。当前尚未设置公共仓库地址，发布前应补齐维护联系与 repository 字段。发布流程见 [RELEASE_CHECKLIST.md](docs/RELEASE_CHECKLIST.md)，不要把 `moon package` 当作 publish。
+安全问题优先通过仓库维护者可用的私下渠道提交最小合成复现；不公开真实报文或凭证。公共仓库为 [ShiChengxu-creater/MoonEdifact](https://github.com/ShiChengxu-creater/MoonEdifact)，维护者为 [ShiChengxu-creater](https://github.com/ShiChengxu-creater)；普通问题可在仓库提交合成复现，专用私下安全联系渠道尚未配置。发布流程见 [RELEASE_CHECKLIST.md](docs/RELEASE_CHECKLIST.md)，不要把 `moon package` 当作 publish。

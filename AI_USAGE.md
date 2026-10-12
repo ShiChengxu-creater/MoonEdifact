@@ -8,4 +8,4 @@ AI 参与需求落地、架构与公共 API、MoonBit/C/Python 实现、失败�
 
 自动测试和 AI 审查不能代替维护者签署规范、版权或发布结论。人工最终复核、GitHub CI、Mooncakes 发布与注册表安装尚需维护者执行。未虚构人工审核、真实交易测试、成熟工具差分、性能或覆盖率结果。
 
-本次没有 push、publish、上传交易数据或配置定期自动任务。
+初验实现阶段没有 push、publish、上传交易数据或配置定期自动任务。2026-10-12，用户后续授权 Codex 用 `ShiChengxu-creater` 创建公开 GitHub 仓库并推送，跟进 CI，失败时继续修复；此授权覆盖此前的本地提交限制。Mooncakes publish 和注册表安装仍未执行。
