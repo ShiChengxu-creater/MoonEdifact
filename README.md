@@ -46,10 +46,10 @@ syntax=passed envelope=passed rules=not_checked messages=1 segments=5
 
 ## 嵌入 MoonBit 项目
 
-包名沿用 `ShiChengxu/MoonEdifact`，版本 `0.1.0`。注册表发布尚未执行。**发布后**可在消费项目中执行：
+包名为 `ShiChengxu/MoonEdifact`，当前发行版本为 `0.1.1`。Mooncakes 页面：[ShiChengxu/MoonEdifact](https://mooncakes.io/docs/ShiChengxu/MoonEdifact)。在消费项目中执行：
 
 ```sh
-moon add ShiChengxu/MoonEdifact@0.1.0
+moon add ShiChengxu/MoonEdifact@0.1.1
 ```
 
 在消费包的 `moon.pkg` 添加：

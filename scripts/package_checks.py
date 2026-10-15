@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def main():
-    archive = ROOT / "_build/publish/ShiChengxu-MoonEdifact-0.1.0.zip"
+    archive = ROOT / "_build/publish/ShiChengxu-MoonEdifact-0.1.1.zip"
     required = {
         "moon.mod", "moon.pkg", "pkg.generated.mbti", "api.mbt", "syntax.mbt",
         "lexer.mbt", "envelope.mbt", "report.mbt", "cmd/nativeio/io.c",

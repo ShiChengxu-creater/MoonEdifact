@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1 — 2026-10-15
+
+- 将项目仓库与维护者信息统一为 `ShiChengxu-creater`，Mooncakes 包名保持 `ShiChengxu/MoonEdifact`。
+- 同步安装命令和发布归档版本；解析、封套校验、诊断及 CLI 功能与 0.1.0 相同。
+
 ## 0.1.0 — 2026-10-11（本地初验候选，未发布）
 
 - 新增 Bytes 输入的语法版本 3 解析，支持 UNOA 限定字符与 UNOB 可打印 ASCII、可选 UNA、自定义服务字符、release、空值和原始字节区间。
